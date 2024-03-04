@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Человек</title>
+</head>
+<body>
+<a>ФИО: </a>
+<a th:text="${person.getFullName()}">Value</a>
+<br/>
+<a>Год рождения: </a>
+<a th:text="${person.getYearOfBirth()}">Value</a>
+<br/>
+<br/>
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Изменить человека"/> </a>
+<br/>
+<br/>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Удалить человека"/>
+</form>
+
+<hr/>
+<div th:if="${person?.getBooks()?.size()!=0}">
+    <a>Книги на руках:</a>
+    <div th:each="book : ${person?.getBooks()}">
+        <a th:href="@{/books/{id}(id=${book.getId()})}"
+           th:text="${book.getNameOfBook()}"></a>
+        <a>, </a>
+        <a th:href="@{/books/{id}(id=${book.getId()})}"
+           th:text="${book.getAuthorOfBook()}"></a>
+        <a>, </a>
+        <a th:href="@{/books/{id}(id=${book.getId()})}"
+           th:text="${book.getYearOfWritingBook()}"></a>
+    </div>
+</div>
+<div style="color: green" th:if="${person?.getBooks()?.size()==0}">
+    <a>Этот человек еще не брал книг</a>
+</div>
+</body>
+</html>
