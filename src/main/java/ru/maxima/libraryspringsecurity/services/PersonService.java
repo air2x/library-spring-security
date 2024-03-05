@@ -18,8 +18,4 @@ public class PersonService {
     public Person findNyUserName(String name) {
         return peopleRepository.findByUserName(name);
     }
-
-    public void save(Person person) {
-        peopleRepository.save(person);
-    }
 }

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.maxima.libraryspringsecurity.model.Person;
+import ru.maxima.libraryspringsecurity.services.AdminService;
 import ru.maxima.libraryspringsecurity.services.PersonService;
+import ru.maxima.libraryspringsecurity.services.RegistrationService;
 import ru.maxima.libraryspringsecurity.validation.PersonValidator;
 
 @Controller
@@ -17,12 +19,15 @@ import ru.maxima.libraryspringsecurity.validation.PersonValidator;
 public class AuthController {
 
     private final PersonValidator validator;
-    private final PersonService service;
+    private final RegistrationService registrationService;
+    private final AdminService adminService;
 
     @Autowired
-    public AuthController(PersonValidator validator, PersonService service) {
+    public AuthController(PersonValidator validator, PersonService personService, RegistrationService registrationService, AdminService adminService) {
         this.validator = validator;
-        this.service = service;
+
+        this.registrationService = registrationService;
+        this.adminService = adminService;
     }
 
     @GetMapping("/login")
@@ -43,7 +48,13 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             return "/auth/registration";
         }
-        service.save(person);
+        registrationService.save(person);
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        adminService.doSomeAdminStuff();
+        return "auth/admin";
     }
 }
