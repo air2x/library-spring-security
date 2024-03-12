@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.maxima.libraryspringsecurity.model.Person;
-import ru.maxima.libraryspringsecurity.security.PersonDetailsService;
+import ru.maxima.libraryspringsecurity.services.PersonDetailsService;
 
 @Component
 public class PersonValidator implements Validator {
@@ -28,7 +28,7 @@ public class PersonValidator implements Validator {
         Person p = (Person) target;
 
         try {
-            service.loadUserByUsername(p.getUserName());
+            service.loadUserByUsername(p.getUsername());
         } catch (UsernameNotFoundException e) {
             return;
         }

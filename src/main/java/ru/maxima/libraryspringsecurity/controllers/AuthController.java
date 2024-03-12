@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.maxima.libraryspringsecurity.model.Person;
-import ru.maxima.libraryspringsecurity.services.AdminService;
-import ru.maxima.libraryspringsecurity.services.PersonService;
 import ru.maxima.libraryspringsecurity.services.RegistrationService;
 import ru.maxima.libraryspringsecurity.validation.PersonValidator;
 
@@ -18,16 +16,13 @@ import ru.maxima.libraryspringsecurity.validation.PersonValidator;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final PersonValidator validator;
+    private final PersonValidator personValidator;
     private final RegistrationService registrationService;
-    private final AdminService adminService;
 
     @Autowired
-    public AuthController(PersonValidator validator, PersonService personService, RegistrationService registrationService, AdminService adminService) {
-        this.validator = validator;
-
+    public AuthController(PersonValidator personValidator, RegistrationService registrationService) {
+        this.personValidator = personValidator;
         this.registrationService = registrationService;
-        this.adminService = adminService;
     }
 
     @GetMapping("/login")
@@ -36,25 +31,18 @@ public class AuthController {
     }
 
     @GetMapping("/registration")
-    public String giveRegistrationPage(@ModelAttribute Person person) {
+    public String registrationPage(@ModelAttribute("person") Person person) {
         return "auth/registration";
     }
 
     @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("personFromPage") @Valid Person person,
+    public String performRegistration(@ModelAttribute("person") @Valid Person person,
                                       BindingResult bindingResult) {
-        validator.validate(person, bindingResult);
-
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "/auth/registration";
         }
-        registrationService.save(person);
-        return "redirect:/auth/login";
-    }
-
-    @GetMapping("/admin")
-    public String admin() {
-        adminService.doSomeAdminStuff();
-        return "auth/admin";
+        registrationService.register(person);
+        return "redirect:/books";
     }
 }

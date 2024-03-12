@@ -3,6 +3,7 @@ package ru.maxima.libraryspringsecurity.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.maxima.libraryspringsecurity.model.Person;
 import ru.maxima.libraryspringsecurity.repositories.PeopleRepository;
 
@@ -10,7 +11,6 @@ import ru.maxima.libraryspringsecurity.repositories.PeopleRepository;
 public class RegistrationService {
 
     private final PeopleRepository peopleRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -19,10 +19,10 @@ public class RegistrationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void save(Person person) {
-        String password = passwordEncoder.encode(person.getPassword());
+    @Transactional
+    public void register(Person person) {
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRole("ROLE_USER");
-        person.setPassword(password);
         peopleRepository.save(person);
     }
 }

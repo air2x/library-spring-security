@@ -36,12 +36,12 @@ public class Person {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Book> books;
 
-    @Column(name = "user_name")
+    @Column(name = "username")
     @Size(min = 2, max = 50, message = "Логин не должен быть меньше 2")
-    private String userName;
+    private String username;
 
     @Column(name = "password")
-    @Size(min = 2, max = 50, message = "Пароль не должен быть меньше 2")
+    @Size(min = 2, max = 500, message = "Пароль не должен быть меньше 2")
     private String password;
 
     @Column(name = "role")
@@ -50,9 +50,9 @@ public class Person {
     public Person() {
     }
 
-    public Person(int id, String fullName, int yearOfBirth) {
-        this.id = id;
+    public Person(String fullName, int yearOfBirth, String username) {
         this.fullName = fullName;
         this.yearOfBirth = yearOfBirth;
+        this.username = username;
     }
 }

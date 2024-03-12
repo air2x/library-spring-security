@@ -28,7 +28,7 @@ public class PersonDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return person.getUserName();
+        return person.getUsername();
     }
 
     @Override
@@ -49,5 +49,9 @@ public class PersonDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Person getPerson() {
+        return person;
     }
 }

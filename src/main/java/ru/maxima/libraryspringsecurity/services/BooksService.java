@@ -1,6 +1,7 @@
 package ru.maxima.libraryspringsecurity.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.maxima.libraryspringsecurity.model.Book;
@@ -28,16 +29,19 @@ public class BooksService {
         return booksRepository.findAll();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Book findOneBook(int id) {
         Optional<Book> foundBook = booksRepository.findById(id);
         return foundBook.orElse(null);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void saveBook(Book book) {
         booksRepository.save(book);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void updateBook(int id, Book updateBook) {
         updateBook.setId(id);
@@ -47,11 +51,13 @@ public class BooksService {
         booksRepository.save(updateBook);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void deleteBook(int id) {
         booksRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void assignABook(int bookId, Person person) {
         Book book = booksRepository.findById(bookId)
@@ -63,6 +69,7 @@ public class BooksService {
         booksRepository.save(book);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void freeTheBook(int bookId) {
         Book book = booksRepository.findById(bookId)
